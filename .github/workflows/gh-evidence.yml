@@ -17,7 +17,7 @@ jobs:
   evidnece_and_policy_scm:
     name: Evidence and Policy - Github
   
-    uses: scribe-public/reusable-workflows/.github/workflows/github-demo.yaml@main
+    uses: scribe-public/reusable-workflows/.github/workflows/github-demo.yaml@mikey_test
     with:
         scribe_valint_url: "https://api.staging.scribesecurity.com"
         scribe_product_name: "Astro-Analytics"
