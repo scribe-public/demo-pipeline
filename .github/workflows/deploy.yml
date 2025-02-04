@@ -7,7 +7,7 @@ on:
       workflows: ["Run Pipeline"]  # Matches the name of the first workflow
       types:
       - completed  # Triggers when the workflow completes (successful or failed)
-
+    pull_request:
 
 jobs:
   deploy-and-discover:
@@ -19,6 +19,7 @@ jobs:
         scribe_product_name: "Astro-Analytics"
         scribe_product_version: ${{ vars.VERSION }}
         targets: "scribesecurity/astro-analytics:latest"
+        log_level: TRACE
     secrets: 
         SCRIBE_TOKEN: ${{ secrets.SCRIBE_HEYMAN_TEAM_TOKEN }}
         DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}

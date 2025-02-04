@@ -3,27 +3,22 @@ name: Scribe GH Evidnece
 on:
   # End of pipeline.yml
     workflow_dispatch:
-    # workflow_run:
-    #   workflows: ["Run Pipeline"]  # Matches the name of the first workflow
-    #   types:
-    #   - completed  # Triggers when the workflow completes (successful or failed)
-    pull_request:
+    workflow_run:
+      workflows: ["Run Pipeline"]  # Matches the name of the first workflow
+      types:
+      - completed  # Triggers when the workflow completes (successful or failed)
 
-env:
-  LOG_LEVEL: "TRACE"
 
 jobs:
 
   evidnece_and_policy_scm:
     name: Evidence and Policy - Github
   
-    uses: scribe-public/reusable-workflows/.github/workflows/github-demo.yaml@mikey_test
+    uses: scribe-public/reusable-workflows/.github/workflows/github-demo.yaml@main
     with:
         scribe_valint_url: "https://api.staging.scribesecurity.com"
         scribe_product_name: "Astro-Analytics"
         scribe_product_version: ${{ vars.VERSION }}
-        log_level: TRACE
     secrets: 
         SCRIBE_TOKEN: ${{ secrets.SCRIBE_HEYMAN_TEAM_TOKEN }}
         GH_TOKEN: ${{ secrets.DEMO_GH_SECRET }}
-
