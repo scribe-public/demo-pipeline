@@ -3,11 +3,14 @@ name: Scribe GH Evidnece
 on:
   # End of pipeline.yml
     workflow_dispatch:
-    workflow_run:
-      workflows: ["Run Pipeline"]  # Matches the name of the first workflow
-      types:
-      - completed  # Triggers when the workflow completes (successful or failed)
+    # workflow_run:
+    #   workflows: ["Run Pipeline"]  # Matches the name of the first workflow
+    #   types:
+    #   - completed  # Triggers when the workflow completes (successful or failed)
+    pull_request:
 
+env:
+  LOG_LEVEL: "TRACE"
 
 jobs:
 
@@ -22,3 +25,5 @@ jobs:
     secrets: 
         SCRIBE_TOKEN: ${{ secrets.SCRIBE_HEYMAN_TEAM_TOKEN }}
         GH_TOKEN: ${{ secrets.DEMO_GH_SECRET }}
+    env:
+        LOG_LEVEL: "TRACE"
