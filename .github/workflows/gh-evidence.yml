@@ -25,3 +25,4 @@ jobs:
     secrets: 
         SCRIBE_TOKEN: ${{ secrets.SCRIBE_HEYMAN_TEAM_TOKEN }}
         GH_TOKEN: ${{ secrets.DEMO_GH_SECRET }}
+
