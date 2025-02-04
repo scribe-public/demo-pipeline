@@ -13,7 +13,7 @@ jobs:
   deploy-and-discover:
      
     name: Discover and Evaluate K8s
-    uses: scribe-public/reusable-workflows/.github/workflows/k8s-demo.yaml@main
+    uses: scribe-public/reusable-workflows/.github/workflows/k8s-demo.yaml@mikey_test
     with:
         scribe_valint_url: "https://api.scribesecurity.com"
         scribe_product_name: "Astro-Analytics"
