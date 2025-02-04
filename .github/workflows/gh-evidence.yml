@@ -22,6 +22,7 @@ jobs:
         scribe_valint_url: "https://api.staging.scribesecurity.com"
         scribe_product_name: "Astro-Analytics"
         scribe_product_version: ${{ vars.VERSION }}
+        log_level: TRACE
     secrets: 
         SCRIBE_TOKEN: ${{ secrets.SCRIBE_HEYMAN_TEAM_TOKEN }}
         GH_TOKEN: ${{ secrets.DEMO_GH_SECRET }}
