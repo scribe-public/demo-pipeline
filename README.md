@@ -19,3 +19,4 @@ Example:
 
 Goto to Analytics->fileDiff, enter these two attestation ids and enter a file path regex such as /app/node_modules/* 
 Expect to get empty results as the dependencies are the same in both the SBOMs.
+

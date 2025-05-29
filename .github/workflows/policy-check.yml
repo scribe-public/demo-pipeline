@@ -1,0 +1,95 @@
+name: Policy-Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
+# Test 1
+jobs:
+  image-policy-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+
+    if: (github.actor != 'dependabot[bot]')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+  
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v2
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Build only on PR check
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        if: github.event_name == 'pull_request'
+        with:
+          context: .
+          file: Dockerfile_slim
+          push: false
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/astro-analytics-slim:${{ vars.VERSION }}
+  
+      - uses: aquasecurity/trivy-action@0.28.0
+        name: Run Trivy
+        continue-on-error: true
+        with:
+          image-ref: ghcr.io/${{ github.repository_owner }}/astro-analytics-slim:${{ vars.VERSION }}
+          format: 'sarif'
+          exit-code: '0'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          output: 'trivy-report.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      # Continue on error for pr events.
+      - name: Collect Evidence and Evaluate Image Policy
+        uses: scribe-security/action-verify@dev
+        # continue-on-error: true
+        with:
+          initiative: sp-800-190@v2
+          target: ghcr.io/${{ github.repository_owner }}/astro-analytics-slim:${{ vars.VERSION }}
+          bom: true # Create CycloneDX SBOM evidence
+          base-image: Dockerfile_slim # Include base image evidence in SBOM
+          input: sarif:trivy-report.sarif # Create Vulnerability evidence
+          input-format: attest # Signing Image requirement
+          bundle-branch: dev
+          beautify: true
+          verbose: 2
+        env:
+          DEBUG: true
+          VALINT_BOM_AUTHOR_NAME: Sam # Include NTIA requirement in SBOM
+          VALINT_BOM_AUTHOR_EMAIL: sam@mycompany.com
+          VALINT_BOM_AUTHOR_PHONE: +97252-1111111
+          VALINT_BOM_SUPPLIER_NAME: Scribe-Security
+          VALINT_BOM_SUPPLIER_URL: www.mycompany.com
+          VALINT_BOM_SUPPLIER_EMAIL: info@mycompany.com
+          VALINT_BOM_SUPPLIER_PHONE: 001-001-0011
+
+      - name: Upload evidence
+        if: always() 
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence
+          path: |
+            evidence
+            trivy-report.sarif
+          retention-days: 1
