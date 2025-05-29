@@ -41,6 +41,9 @@ jobs:
             --organization.mapping *${{ github.repository_owner}}::${{env.PRODUCT_NAME}}::${{ env.PRODUCT_VERSION }}
             --repository.mapping *demo-pipeline::${{ env.PRODUCT_NAME }}::${{ env.PRODUCT_VERSION }}
             --hook opengrep
+        env:
+          VALINT_LOG_LEVEL: debug
+          DEBUG: true
 
       # - name: Verify Github
       #   uses: scribe-security/action-platforms@dev
