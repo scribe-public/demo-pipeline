@@ -40,6 +40,9 @@ jobs:
             --organization.mapping *${{ github.repository_owner}}::${{env.PRODUCT_NAME}}::${{ env.PRODUCT_VERSION }}
             --repository.mapping *demo-pipeline::${{ env.PRODUCT_NAME }}::${{ env.PRODUCT_VERSION }}
             --hook opengrep
+        env:
+          VALINT_LOG_LEVEL: debug
+          DEBUG: 'true'
 
       # - name: Verify Github
       #   uses: scribe-security/action-platforms@dev
@@ -55,7 +58,7 @@ jobs:
 
   k8s-evidence:
     name: Discover K8s
-    uses: scribe-public/reusable-workflows/.github/workflows/k8s-demo.yaml@main
+    uses: scribe-public/reusable-workflows/.github/workflows/k8s-demo.yaml@mikey_forbidden_test
     with:
         scribe_valint_url: "https://api.scribesecurity.com"
         scribe_product_name: "Astro-Analytics-Discovery"
@@ -65,8 +68,9 @@ jobs:
         sbom: true
         k8s_discovery_args: --hook kubescape_cluster,apparmor_namespace
         k8s_bom_args: --hook trivy_iac_and_secrets
+        valint_log_level: debug
+        trace: 'true'
     secrets: 
         SCRIBE_TOKEN: ${{ secrets.SCRIBE_HEYMAN_TEAM_TOKEN }}
         DOCKERHUB_USERNAME: ${{ github.actor }}
         DOCKERHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-        
