@@ -75,4 +75,3 @@ jobs:
         SCRIBE_TOKEN: ${{ secrets.SCRIBE_HEYMAN_TEAM_TOKEN }}
         DOCKERHUB_USERNAME: ${{ github.actor }}
         DOCKERHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-
