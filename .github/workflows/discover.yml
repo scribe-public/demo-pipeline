@@ -41,8 +41,9 @@ jobs:
             "https://api.github.com/repos/${{ github.repository }}/actions/workflows/$WORKFLOW_ID/runs?status=success&per_page=1" | \
             jq -r '.workflow_runs[0].run_number')
       
-          echo "PRODUCT_VERSION=$RUN_NUMBER" >> $GITHUB_ENV
-          echo "PRODUCT_VERSION=$RUN_NUMBER" >> $GITHUB_OUTPUT
+          echo "PRODUCT_VERSION=\"cache\" " >> $GITHUB_ENV
+          echo "PRODUCT_VERSION=\"cache\" " >> $GITHUB_OUTPUT
+
       - name: Get Repository Base Name
         run: |
           # Extract the base name of the repository
