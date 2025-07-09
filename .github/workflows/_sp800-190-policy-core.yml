@@ -117,7 +117,7 @@ jobs:
       - name: Collect evidence & evaluate policy
         uses: scribe-security/action-verify@master
         with:
-          initiative: sp-800-190@v2
+          initiative: policies/sp-800-190.yml
           target: ${{ inputs.image-registry }}/${{ github.repository_owner }}/${{ inputs.image-name }}:${{ inputs.image-tag }}
           bom: true
           base-image: ${{ inputs.dockerfile }}

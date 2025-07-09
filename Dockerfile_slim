@@ -2,5 +2,5 @@ FROM alpine:latest
 
 RUN apk add curl
 
-CMD ["echo", "hello"
+CMD ["echo", "hello"]
 

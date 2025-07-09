@@ -2,6 +2,10 @@ name: Discover (agentless) Pipeline
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Build and Push to GCR"]
+    types:
+      - completed
 
 env:
   PRODUCT_NAME: "Astro-Analytics-Discovery"
@@ -10,12 +14,18 @@ env:
 jobs: 
   github-evidence:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # Sigstore Signing
     outputs:
       product_version: ${{ steps.get_version.outputs.PRODUCT_VERSION }}
 
     env:
       GITHUB_EXTERNAL_TOKEN: ${{ secrets.DEMO_GH_SECRET }}
       SCRIBE_TOKEN: ${{ secrets.SCRIBE_TOKEN }}
+      VALINT_VERIFY_BEAUTIFY: true
+      DOCKER_DRIVER: overlay2
+      DOCKER_CONFIG: ${{ github.workspace }}/.docker
 
     steps:
       - name: Checkout code
@@ -41,42 +51,74 @@ jobs:
             "https://api.github.com/repos/${{ github.repository }}/actions/workflows/$WORKFLOW_ID/runs?status=success&per_page=1" | \
             jq -r '.workflow_runs[0].run_number')
       
+          echo "Latest successful run number is: $RUN_NUMBER"
+
           echo "PRODUCT_VERSION=$RUN_NUMBER" >> $GITHUB_ENV
           echo "PRODUCT_VERSION=$RUN_NUMBER" >> $GITHUB_OUTPUT
+
       - name: Get Repository Base Name
         run: |
           # Extract the base name of the repository
           REPO_BASE_NAME=$(basename ${{ github.repository }})
           echo "REPO_BASE_NAME=$REPO_BASE_NAME" >> $GITHUB_ENV
+          
 
-      - name: Discover Github
+      - name: Sign in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.DEMO_GH_SECRET }}
+
+      - name: INFO docker
+        run: |
+          echo "Product Version PRODUCT_VERSION"
+          ls -lh $HOME/.docker/config.json || true
+          cat $HOME/.docker/config.json || true
+          pwd
+          ls -lh $DOCKER_CONFIG || true
+          cat $DOCKER_CONFIG/config.json || true
+          
+
+      - name: Discover Github and Image SLSA Provanence Creation
         uses: scribe-security/action-platforms@dev
         with:
           command: discover
           platform: github
+          valint_args: >-
+            --valint.log-level debug
+          slsa: true
+          sign: true
+          attest-default: sigstore
           args: >-
             --token ${{ env.GITHUB_EXTERNAL_TOKEN}}
             --organization.mapping *${{ github.repository_owner}}::${{env.PRODUCT_NAME}}::${{ env.PRODUCT_VERSION }}
             --repository.mapping *${{ env.REPO_BASE_NAME}}::${{ env.PRODUCT_NAME }}::${{ env.PRODUCT_VERSION }}
             --commit.skip --scope.workflow.past_days 2 --scope.workflow.analyzed_logs
             --hook trivy_iac_and_secrets
-            
-      - name: Discover Github
+
+      - name: Bom And Static analysis Github Sources
         uses: scribe-security/action-platforms@dev
         with:
           command: bom
           platform: github
+          sign: true
+          attest-default: sigstore
           args: >-
             --token ${{ env.GITHUB_EXTERNAL_TOKEN}}
             --organization.mapping *${{ github.repository_owner}}::${{env.PRODUCT_NAME}}::${{ env.PRODUCT_VERSION }}
             --repository.mapping *${{ env.REPO_BASE_NAME}}::${{ env.PRODUCT_NAME }}::${{ env.PRODUCT_VERSION }}
             --hook opengrep
+        env:
+          LOG_LEVEL: DEBUG
 
-      - name: Verify Github
+      - name: Verify SSPB Github initiative
         uses: scribe-security/action-platforms@dev
         with:
           command: verify
           platform: github
+          sign: true
+          attest-default: sigstore
           args: >-
             --organization.mapping *${{ github.repository_owner}}::${{ env.PRODUCT_NAME }}::${{ env.PRODUCT_VERSION }}
             --repository.mapping *${{ env.REPO_BASE_NAME}}::${{ env.PRODUCT_NAME }}::${{ env.PRODUCT_VERSION }}
@@ -98,4 +140,3 @@ jobs:
       SCRIBE_TOKEN: ${{ secrets.SCRIBE_TOKEN }}
       DOCKERHUB_USERNAME: ${{ github.actor }}
       DOCKERHUB_PASSWORD: ${{ secrets.DEMO_GH_SECRET }}
-
