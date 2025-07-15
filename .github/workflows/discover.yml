@@ -107,6 +107,8 @@ jobs:
           platform: github
           sign: true
           attest-default: sigstore
+          valint_args: >-
+            --valint.log-level debug
           args: >-
             --token ${{ env.GITHUB_EXTERNAL_TOKEN}}
             --organization.mapping *${{ github.repository_owner}}::${{env.PRODUCT_NAME}}::${{ env.PRODUCT_VERSION }}
