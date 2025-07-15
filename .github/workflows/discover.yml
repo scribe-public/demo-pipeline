@@ -118,6 +118,7 @@ jobs:
         env:
           LOG_LEVEL: DEBUG
 
+          
       - name: Verify SSPB Github initiative
         uses: scribe-security/action-platforms@dev
         with:
