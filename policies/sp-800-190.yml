@@ -133,7 +133,7 @@ controls:
           Reduces the risk of compromised or outdated base images 
           entering the supply chain.
         with:
-          approved_sources: []
+          approved_sources: 
             "index.docker.io/library/node.*"
             # - "index.docker.io/library/my_company/base.*"
 
@@ -145,7 +145,7 @@ controls:
           Blocks images from untrusted registries, reducing the risk of 
           using malicious or compromised images.
         with:
-          approved_sources: []
+          approved_sources: 
             - "index.docker.io/library/.*"
             - "ghcr.io/scribe-public/.*"
             # - "index.docker.io/library/my_company/.*"
