@@ -87,7 +87,7 @@ jobs:
           platform: github
           valint_args: >-
             --valint.log-level debug
-          slsa: true
+          # slsa: true
           sign: true
           attest-default: sigstore
           args: >-
