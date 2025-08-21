@@ -1,3 +1,17 @@
+# Findings Remediation Summary
+Configuration:
+
+{
+  "name": "remediate_findings_groups",
+  "strategy": "one_by_one",
+  "agent": "codex",
+  "limit": 1,
+  "prompt_file": "../prompts/finding_group.md"
+}
+
+
+## Group Processing Summary
+
 # Ensure Docker containers run as non-root user
 
 ## Common Issues
@@ -24,3 +38,4 @@ Built the Docker image and verified that the container runs as `appuser` instead
 None.
 
 Tokens used: 20497
+
