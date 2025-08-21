@@ -1,0 +1,30 @@
+[
+  {
+    "unsaved_vulnerability_ids": null,
+    "unsaved_endpoints": [],
+    "title": "By not specifying a USER, a program in the container may run as 'root'. This is a security hazard. If an attacker can control a process running [...]",
+    "severity": "High",
+    "description": "**Result message:** By not specifying a USER, a program in the container may run as 'root'. This is a security hazard. If an attacker can control a process running as root, they may have control over the container. Ensure that the last USER in a Dockerfile is a USER other than 'root'.\n**Snippet:**\n```\nCMD [\"sh\", \"-c\", \"python healthcheck.py & npm start\"]\n```\n**Rule name:** dockerfile.security.missing-user.missing-user\n**Rule short description:** Opengrep Finding: dockerfile.security.missing-user.missing-user",
+    "static_finding": true,
+    "dynamic_finding": false,
+    "false_p": false,
+    "active": true,
+    "file_path": "output/clone/scribe-public/demo-pipeline/Dockerfile",
+    "line": 13,
+    "references": "https://semgrep.dev/r/dockerfile.security.missing-user.missing-user",
+    "vuln_id_from_tool": "dockerfile.security.missing-user.missing-user",
+    "cwe": 250,
+    "tags": [
+      "OWASP-A04:2021 - Insecure Design",
+      "CWE-250: Execution with Unnecessary Privileges",
+      "MEDIUM CONFIDENCE",
+      "security"
+    ],
+    "unique_id_from_tool": "f718d540bd8255769be272b675e33ad3db5ac2d9a2a4a83387bbca7df9190ba94eb7209c9891ecb80a37654ab15ed43812e46ba08fa9281ea5de50a3ad38a5dd_0",
+    "Remediation": {
+      "fix commit": "https://github.com/scribe-public/demo-pipeline/commit/93a7080f8e76c1ee093e51d46f097addd8d01bd3",
+      "status": "fixed",
+      "resolution": "Added non-root user and set USER to prevent root execution"
+    }
+  }
+]
