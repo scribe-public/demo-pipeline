@@ -8,7 +8,7 @@ on:
       - completed
 
 env:
-  PRODUCT_NAME: "Astro-Analytics"
+  PRODUCT_NAME: "nautical-analytics"
 #  PRODUCT_VERSION: ${{ github.run_number }}  --- is set later
 
 jobs: 
@@ -74,7 +74,7 @@ jobs:
         uses: scribe-security/action-verify@master
         with:
           initiative: policies/sp-800-190.yml
-          target: "ghcr.io/${{ github.repository_owner }}/astro-analytics:${{ env.PRODUCT_VERSION }}"
+          target: "ghcr.io/${{ github.repository_owner }}/nautical-analytics:${{ env.PRODUCT_VERSION }}"
           bom: true
           base-image: Dockerfile
           input: sarif:trivy-report.json

@@ -1,0 +1,63 @@
+# Sample Configuration for Findings Processor
+
+# Sources: Define where to download findings files from
+sources:
+
+
+  # - name: "Finding Attestation File"
+  #   type: "file"
+  #   url: "data/PRFinding_finding_attestation.json"
+
+  # - name: "Get Future Path"
+  #   type: "future_path"
+  #   path: "data/finding_attestation.json"
+
+  # Get a findings attestation from Scribe
+  - name: "Get Finding from Scribe"
+    type: "function"
+    function_name: "get_scribe_findings"
+    parameters:
+      criteria:
+        name: nautical-analytics-Discovery
+        product_version: 'PRODUCT_VERSION'
+        predicate_type: http://scribesecurity.com/evidence/finding/v0.1
+        parser: Sarif
+  #       # labels:
+  #       #   - platform-hook-name=Opengrep Static Analysis Scan
+
+
+# File Tools: Run on entire findings files
+file_tools:
+  - name: "cleanup"          # Built-in tool for file information
+    command: "rm -rf output/clone/* && sleep 2"
+
+  - name: "check valint"
+    command: "/usr/bin/valint -h"
+
+  - name: "initialize_git"
+    strategy: "download_repo" # values: use_existing_repo, download_repo, extract_repo_url_from_findings
+    repo_url: "https://github.com/scribe-public/demo-remediation.git"
+
+ # Strategies: all_at_once, file_path, one_by_one
+  - name: "remediate_findings_groups"
+    strategy: "one_by_one"
+    agent: "codex"  # Use 'emulate' for testing process without AI interaction
+    limit: 5
+    model: gpt-5-mini
+
+
+  - name: "create_github_pr"
+    add_pr_link: true
+
+# Post-processing: Commands to run after all tools have processed findings
+post_processing:
+  # - name: "do anything"
+  #   command: "echo 'Doing anything'"
+
+  - name: "upload_patched_finding_attestation"
+
+# Global settings
+settings:
+  timeout: 30
+  retry_count: 2
+  retry_delay: 2

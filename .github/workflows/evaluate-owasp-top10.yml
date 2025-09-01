@@ -1,17 +1,17 @@
 name: Evaluate OWASP-TOP10-CICD-SC
 
 on:
-  push:
-    branches:
-      - owasp-top10-cicd
+  # push:
+  #   branches:
+  #     - owasp-top10-cicd
   workflow_dispatch:
-  workflow_run:
-    workflows: ["Build to GCR"]
-    types:
-      - completed
+  # workflow_run:
+  #   workflows: ["Build to GCR"]
+  #   types:
+  #     - completed
 
 env:
-  PRODUCT_NAME: "Astro-Analytics"
+  PRODUCT_NAME: "nautical-analytics"
 #  PRODUCT_VERSION: ${{ github.run_number }}  --- is set later
 
 jobs:

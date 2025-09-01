@@ -2,7 +2,7 @@ name: Attest to reference data (attest-commit)
 
 env:
   
-  APP_NAME: Astro-Analytics
+  APP_NAME: nautical-analytics
   VALINT_BOM_AUTHOR_NAME: Guy-Chernobrov
   VALINT_BOM_AUTHOR_EMAIL: gc@scribesecurity.com
   VALINT_BOM_AUTHOR_PHONE: 052-9281309
@@ -52,14 +52,14 @@ jobs:
             label: is_git_commit
 
       - name: Build image locally
-        run:  docker build -t astro-analytics:dependency-reference .
+        run:  docker build -t nautical-analytics:dependency-reference .
 
       - name: Generate File-Level SBOM labeled dependencies-reference
         uses: scribe-security/action-bom@master
         with:
-            target: docker:astro-analytics:dependency-reference
+            target: docker:nautical-analytics:dependency-reference
             scribe-enable: true
-            product-key: Astro-Analytics
+            product-key: nautical-analytics
             product-version: ${{vars.VERSION}}
             scribe-client-secret: ${{ secrets.SCRIBE_HEYMAN_TEAM_TOKEN }}
             components: files
