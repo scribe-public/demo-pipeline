@@ -10,8 +10,7 @@
       "express": "^4.18.2",
       "systeminformation": "5.3.0",
       "cookie-parser": "^1.4.6",
-      "csurf": "^1.11.0",
-      "logdash": "4.5.1"
+      "csurf": "^1.11.0"
     },
   "engines": {
     "node": ">=14.0.0"
