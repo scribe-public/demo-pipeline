@@ -123,7 +123,7 @@ jobs:
             --repository.mapping *${{ env.REPO_BASE_NAME}}::${{ env.PRODUCT_NAME }}::${{ env.PRODUCT_VERSION }}
             --initiative sspb-gh.yaml@v2
             
-   k8s-evidence:
+  k8s-evidence:
      name: Discover K8s
      needs: github-evidence
      uses: scribe-public/reusable-workflows/.github/workflows/k8s-demo.yaml@main
