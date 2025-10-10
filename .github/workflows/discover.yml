@@ -81,7 +81,7 @@ jobs:
           
 
       - name: Discover Github and Image SLSA Provanence Creation
-        uses: scribe-security/action-platforms@dev
+        uses: scribe-security/action-platforms@master
         with:
           command: discover
           platform: github
@@ -97,7 +97,7 @@ jobs:
             --commit.skip --scope.workflow.past_days 2 --scope.workflow.analyzed_logs
 
       - name: Bom And Static analysis Github Sources
-        uses: scribe-security/action-platforms@dev
+        uses: scribe-security/action-platforms@master
         with:
           command: bom
           platform: github
@@ -112,7 +112,7 @@ jobs:
           LOG_LEVEL: DEBUG
 
       - name: Verify SSPB Github initiative
-        uses: scribe-security/action-platforms@dev
+        uses: scribe-security/action-platforms@master
         with:
           command: verify
           platform: github
