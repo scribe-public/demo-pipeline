@@ -87,7 +87,9 @@ jobs:
           command: discover
           valint_args: >-
             --valint.log-level debug
+            --valint.attest: sigstore
             --valint.sign
+            
           platform: github
           #slsa: true
          
