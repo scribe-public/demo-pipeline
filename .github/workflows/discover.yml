@@ -84,10 +84,10 @@ jobs:
         uses: scribe-security/action-platforms@master
         with:
           command: discover
-          platform: github
           valint_args: >-
             --valint.log-level debug
             --attest-default: sigstore
+          platform: github
           #slsa: true
           sign: true
           #attest-default: sigstore
