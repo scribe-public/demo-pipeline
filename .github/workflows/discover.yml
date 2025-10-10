@@ -87,9 +87,10 @@ jobs:
           platform: github
           valint_args: >-
             --valint.log-level debug
-          slsa: true
+            --attest-default: sigstore
+          #slsa: true
           sign: true
-          attest-default: sigstore
+          #attest-default: sigstore
           args: >-
             --token ${{ env.GITHUB_EXTERNAL_TOKEN}}
             --organization.mapping *${{ github.repository_owner}}::${{env.PRODUCT_NAME}}::${{ env.PRODUCT_VERSION }}
@@ -101,8 +102,10 @@ jobs:
         with:
           command: bom
           platform: github
+          valint_args: >-
+            --attest-default: sigstore
           sign: true
-          attest-default: sigstore
+          #attest-default: sigstore
           args: >-
             --token ${{ env.GITHUB_EXTERNAL_TOKEN}}
             --organization.mapping *${{ github.repository_owner}}::${{env.PRODUCT_NAME}}::${{ env.PRODUCT_VERSION }}
@@ -116,8 +119,10 @@ jobs:
         with:
           command: verify
           platform: github
+          valint_args: >-
+            --attest-default: sigstore
           sign: true
-          attest-default: sigstore
+          #attest-default: sigstore
           args: >-
             --organization.mapping *${{ github.repository_owner}}::${{ env.PRODUCT_NAME }}::${{ env.PRODUCT_VERSION }}
             --repository.mapping *${{ env.REPO_BASE_NAME}}::${{ env.PRODUCT_NAME }}::${{ env.PRODUCT_VERSION }}
