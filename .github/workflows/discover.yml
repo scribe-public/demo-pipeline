@@ -86,7 +86,7 @@ jobs:
           command: discover
           valint_args: >-
             --valint.log-level debug
-            --attest-default: sigstore
+            --valint.attest-default: sigstore
           platform: github
           #slsa: true
           sign: true
@@ -103,7 +103,7 @@ jobs:
           command: bom
           platform: github
           valint_args: >-
-            --attest-default: sigstore
+            --valint.attest-default: sigstore
           sign: true
           #attest-default: sigstore
           args: >-
@@ -120,7 +120,7 @@ jobs:
           command: verify
           platform: github
           valint_args: >-
-            --attest-default: sigstore
+            --valint.attest-default: sigstore
           sign: true
           #attest-default: sigstore
           args: >-
