@@ -87,9 +87,10 @@ jobs:
           command: discover
           valint_args: >-
             --valint.log-level debug
+            --valint.sign: true
           platform: github
           #slsa: true
-          sign: true
+         
           #attest-default: sigstore
           args: >-
             --token ${{ env.GITHUB_EXTERNAL_TOKEN}}
