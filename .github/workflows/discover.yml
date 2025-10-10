@@ -24,6 +24,7 @@ jobs:
       GITHUB_EXTERNAL_TOKEN: ${{ secrets.DEMO_GH_SECRET }}
       SCRIBE_TOKEN: ${{ secrets.SCRIBE_TOKEN }}
       VALINT_VERIFY_BEAUTIFY: true
+      VALINT_ATTEST_DEFAULT: sigstore
       DOCKER_DRIVER: overlay2
       DOCKER_CONFIG: ${{ github.workspace }}/.docker
 
@@ -86,7 +87,6 @@ jobs:
           command: discover
           valint_args: >-
             --valint.log-level debug
-            --valint.attest: sigstore
           platform: github
           #slsa: true
           sign: true
