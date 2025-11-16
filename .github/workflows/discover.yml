@@ -99,6 +99,7 @@ jobs:
             --organization.mapping *${{ github.repository_owner}}::${{env.PRODUCT_NAME}}::${{ env.PRODUCT_VERSION }}
             --repository.mapping *${{ env.REPO_BASE_NAME}}::${{ env.PRODUCT_NAME }}::${{ env.PRODUCT_VERSION }}
             --commit.skip --scope.workflow.past_days 2 --scope.workflow.analyzed_logs
+            --hook trivy_iac_and_secrets
         env:
            VALINT_ATTEST_DEFAULT: sigstore
 
