@@ -117,7 +117,8 @@ jobs:
             --token ${{ env.GITHUB_EXTERNAL_TOKEN}}
             --organization.mapping *${{ github.repository_owner}}::${{env.PRODUCT_NAME}}::${{ env.PRODUCT_VERSION }}
             --repository.mapping *${{ env.REPO_BASE_NAME}}::${{ env.PRODUCT_NAME }}::${{ env.PRODUCT_VERSION }}
-            --hook trivy_iac_and_secrets
+            --hook opengrep
+            #--hook trivy_iac_and_secrets
         env:
           LOG_LEVEL: DEBUG
 
