@@ -108,8 +108,10 @@ jobs:
           command: bom
           platform: github
           valint_args: >-
-            --valint.attest-default: sigstore
-          sign: true
+            --valint.log-level debug
+            --valint.attest sigstore
+            --valint.sign
+          #sign: true
           #attest-default: sigstore
           args: >-
             --token ${{ env.GITHUB_EXTERNAL_TOKEN}}
