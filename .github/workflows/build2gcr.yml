@@ -41,6 +41,7 @@ jobs:
         uses: scribe-security/action-bom@master
         env:
             SCRIBE_TOKEN: ${{ secrets.SCRIBE_TOKEN }}
+            SCRIBE_URL: "https://attstore.scribesecurity.com/"
         with:
           target: "ghcr.io/${{ github.repository_owner }}/nautical-analytics:${{ env.PRODUCT_VERSION }}"
           base-image: Dockerfile
