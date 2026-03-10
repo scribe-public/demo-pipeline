@@ -78,7 +78,7 @@ jobs:
           product-key: ${{ env.PRODUCT_NAME }}
           product-version: ${{ env.PRODUCT_VERSION }}
           # components: files
-          format: attest
+          # format: attest
           initiative: slsa.l2@v2
           beautify: true
 
