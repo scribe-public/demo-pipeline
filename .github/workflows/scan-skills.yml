@@ -35,7 +35,7 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          skill-scanner scan-all .github/skills --recursive --policy strict --use-behavioral --use-llm --enable-meta --llm-provider openai --format markdown --output results.md --lenient --detailed
+          skill-scanner scan-all .github/skills --recursive --policy strict --use-behavioral --use-llm --enable-meta --llm-provider openai --format markdown --output results.md --lenient --detailed --format sarif > skill-scan.sarif.json
 
       - name: Upload Results as Evidence
         uses: scribe-security/action-evidence@master
@@ -46,6 +46,17 @@ jobs:
           target: results.md
           product-key: ${{ env.PRODUCT_NAME }}
           product-version: ${{ env.PRODUCT_VERSION }}
+          
+      - name: Upload SARIF Results as Evidence
+        uses: scribe-security/action-evidence@master
+        env:
+          SCRIBE_TOKEN: ${{ secrets.SCRIBE_TOKEN }}
+          SCRIBE_URL: "https://attstore.scribesecurity.com/"
+        with:
+          target: skill-scan.sarif.json
+          product-key: ${{ env.PRODUCT_NAME }}-sarif
+          product-version: ${{ env.PRODUCT_VERSION }}
+          parser: sarif
 
       - name: Upload Results as Artifact
         uses: actions/upload-artifact@v4
