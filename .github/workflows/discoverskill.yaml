@@ -9,7 +9,8 @@ on:
 
 env:
   PRODUCT_NAME: "nautical-analytics-Discovery"
-#  PRODUCT_VERSION: ${{ github.run_number }}  --- is set later
+  PRODUCT_VERSION: ${{ github.run_number }} 
+  SKILL_NAME: secure-deps-and-secrets
 
 jobs: 
   github-evidence:
@@ -29,6 +30,7 @@ jobs:
       VALINT_ATTEST_DEFAULT: sigstore
       DOCKER_DRIVER: overlay2
       DOCKER_CONFIG: ${{ github.workspace }}/.docker
+      LOCAL_URL: "https://attstore.scribesecurity.com"
 
     steps:
       - name: Checkout code
@@ -81,7 +83,19 @@ jobs:
           pwd
           ls -lh $DOCKER_CONFIG || true
           cat $DOCKER_CONFIG/config.json || true
-          
+      
+      - name: Generate signed SBOM for skill
+        uses: scribe-security/action-bom@master
+        with:
+            target: "dir:.github/skills/${{env.SKILL_NAME}}"
+            product-key: ${{ env.PRODUCT_NAME }}
+            product-version: ${{ env.PRODUCT_VERSION }}
+            scribe-client-secret: ${{ secrets.ATTSTORE_TOKEN }}
+            components: commits,packages,files,dep
+            format: attest
+            verbose: 2
+            label: AGENT_SKILL
+            scribe-url: ${{ env.LOCAL_URL }}   
 
       - name: Discover Github and Image SLSA Provanence Creation
         uses: scribe-security/action-platforms@master
@@ -140,7 +154,18 @@ jobs:
             --organization.mapping *${{ github.repository_owner}}::${{ env.PRODUCT_NAME }}::${{ env.PRODUCT_VERSION }}
             --repository.mapping *${{ env.REPO_BASE_NAME}}::${{ env.PRODUCT_NAME }}::${{ env.PRODUCT_VERSION }}
             --initiative sspb-gh.yaml@v2
-            
+      - name: "Verify policy"
+        uses: scribe-security/action-verify@master
+        with:
+            target: "dir:.github/skills/${{env.SKILL_NAME}}"
+            product-key: ${{ env.PRODUCT_NAME }}
+            product-version: ${{env.PRODUCT_VERSION}} 
+            scribe-client-secret: ${{ secrets.ATTSTORE_TOKEN }}
+            components: commits,packages,files,dep
+            format: attest
+            verbose: 2
+            label: AGENT_SKILL
+            scribe-url: ${{ env.LOCAL_URL }}            
   k8s-evidence:
      name: Discover K8s
      needs: github-evidence
