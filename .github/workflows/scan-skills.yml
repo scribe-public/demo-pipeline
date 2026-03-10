@@ -2,10 +2,10 @@ name: Scan Skills
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  # push:
+  #   branches: [main]
+  # pull_request:
+  #   branches: [main]
 
 env:
   PRODUCT_NAME: "skill-scan-demo"
@@ -46,7 +46,7 @@ jobs:
           target: results.md
           product-key: ${{ env.PRODUCT_NAME }}
           product-version: ${{ env.PRODUCT_VERSION }}
-          
+
       - name: Upload SARIF Results as Evidence
         uses: scribe-security/action-evidence@master
         env:
