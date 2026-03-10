@@ -54,9 +54,9 @@ jobs:
           SCRIBE_URL: "https://attstore.scribesecurity.com/"
         with:
           target: skill-scan.sarif.json
-          product-key: ${{ env.PRODUCT_NAME }}-sarif
+          product-key: ${{ env.PRODUCT_NAME }}
           product-version: ${{ env.PRODUCT_VERSION }}
-          parser: sarif
+          parser: Sarif
 
       - name: Upload Results as Artifact
         uses: actions/upload-artifact@v4
