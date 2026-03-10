@@ -35,7 +35,7 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          skill-scanner scan-all .github/skills --recursive --policy strict --use-behavioral --use-llm --enable-meta --llm-provider openai --format markdown --output results.md --lenient --detailed -vv
+          skill-scanner scan-all .github/skills --recursive --policy strict --use-behavioral --use-llm --enable-meta --llm-provider openai --format markdown --output results.md --lenient --detailed
 
       - name: Upload Results as Evidence
         uses: scribe-security/action-evidence@master
