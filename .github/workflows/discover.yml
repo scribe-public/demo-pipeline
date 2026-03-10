@@ -23,6 +23,8 @@ jobs:
     env:
       GITHUB_EXTERNAL_TOKEN: ${{ secrets.DEMO_GH_SECRET }}
       SCRIBE_TOKEN: ${{ secrets.SCRIBE_TOKEN }}
+      VALINT_SCRIBE_URL: "https://attstore.scribesecurity.com/"
+
       VALINT_VERIFY_BEAUTIFY: true
       VALINT_ATTEST_DEFAULT: sigstore
       DOCKER_DRIVER: overlay2
