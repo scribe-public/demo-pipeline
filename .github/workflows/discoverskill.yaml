@@ -8,7 +8,7 @@ on:
       - completed
 
 env:
-  PRODUCT_NAME: "nautical-analytics-Discovery"
+  PRODUCT_NAME: "nautical-analytics-skill"
   PRODUCT_VERSION: ${{ github.run_number }} 
   SKILL_NAME: secure-deps-and-secrets
 
