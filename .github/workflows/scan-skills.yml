@@ -1,0 +1,55 @@
+name: Scan Skills
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  PRODUCT_NAME: "skill-scan-demo"
+  PRODUCT_VERSION: ${{ github.run_number}}
+
+jobs:
+  scan-skills:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      packages: write
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Cisco AI Skill Scanner
+        run: |
+          pip install cisco-ai-skill-scanner
+
+      - name: Run Skill Scanner
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          skill-scanner scan-all .github/skills --recursive --policy strict --use-behavioral --use-llm --enable-meta --llm-provider openai --format markdown --output results.md --lenient --detailed -vv
+
+      - name: Upload Results as Evidence
+        uses: scribe-security/action-evidence@master
+        env:
+          SCRIBE_TOKEN: ${{ secrets.SCRIBE_TOKEN }}
+          SCRIBE_URL: "https://attstore.scribesecurity.com/"
+        with:
+          target: results.md
+          product-key: ${{ env.PRODUCT_NAME }}
+          product-version: ${{ env.PRODUCT_VERSION }}
+
+      - name: Upload Results as Artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: skill-scan-results
+          path: results.md
