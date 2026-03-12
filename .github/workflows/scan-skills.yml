@@ -2,6 +2,9 @@ name: Scan Skills
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+        - '.github/workflows/scan-skills.yml'
   # push:
   #   branches: [main]
   # pull_request:
@@ -33,7 +36,7 @@ jobs:
 
       - name: Run Skill Scanner
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SKILL_SCANNER_LLM_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           skill-scanner scan-all .github/skills --recursive --policy strict --use-behavioral --use-llm --enable-meta --llm-provider openai --format markdown --output results.md --lenient --detailed
 
@@ -50,7 +53,7 @@ jobs:
       
       - name: Run Skill Scanner
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SKILL_SCANNER_LLM_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           skill-scanner scan-all .github/skills --recursive --policy strict --use-behavioral --use-llm --enable-meta --llm-provider openai --format sarif --output skill-scan.sarif --lenient --detailed
 
